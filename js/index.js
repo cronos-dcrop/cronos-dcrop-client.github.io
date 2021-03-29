@@ -3,6 +3,7 @@ var failedLogRequests1 = [];
 var failedLogRequests2 = [];
 var failedLogRequests3 = [];
 var failedLogRequests4 = [];
+var hideControls = false;
 
 window.onload = function () {
     var queryString = window.location.search;
@@ -24,9 +25,15 @@ window.onload = function () {
             else if (paramName == "signalingKey") {
                 useSignalingKey = true;
                 signalingKey = paramValue;
+            } else if (paramName == "hideControls") {
+                if(paramValue.toLowerCase() == "true"){
+                    hideControls = true;
+                }else{
+                    hideControls = false
+                }
             }
             else {
-                view ++;
+                view++;
                 //queryObject[paramName] = "./recvonly.html?roomId=" + paramValue;
                 queryObject[paramName] = "./dcrop/dcrop.html?roomId=" + paramValue;
                 var iframe = document.createElement("iframe");
@@ -35,7 +42,7 @@ window.onload = function () {
                 document.getElementById("container").appendChild(iframe);
             }
         }
-        
+
         var width = "98%";
         var height = "96%";
         switch (view) {
@@ -53,9 +60,9 @@ window.onload = function () {
 
         var elements = document.querySelectorAll('iframe');
         for (var i = 0; i < elements.length; i++) {
-            if(useSignalingKey){
+            if (useSignalingKey) {
                 elements[i].src = queryObject[elements[i].id] + videoCodec + `&signalingKey=${signalingKey}`;
-            }else{
+            } else {
                 elements[i].src = queryObject[elements[i].id] + videoCodec;
             }
             elements[i].style.margin = "2px";

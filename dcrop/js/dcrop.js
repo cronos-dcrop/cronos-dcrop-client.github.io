@@ -68,31 +68,37 @@ logger.logServerId = cameraName;
 document.querySelector("#clientIdInput").value = options.clientId;
 
 // フルスクリーンチェンジイベント
-document.addEventListener("fullscreenchange", ()=> {
+document.addEventListener("fullscreenchange", () => {
   fullScreenChange();
 });
-document.addEventListener("webkitfullscreenchange", ()=> {
+document.addEventListener("webkitfullscreenchange", () => {
   fullScreenChange();
 });
-document.addEventListener("mozfullscreenchange", ()=> {
+document.addEventListener("mozfullscreenchange", () => {
   fullScreenChange();
 });
-document.addEventListener("MSFullscreenChange", ()=> {
+document.addEventListener("MSFullscreenChange", () => {
   fullScreenChange();
 });
 
 // controlクラスにonMouseOver、onMouseOutイベントを追加
-controls = document.getElementsByClassName("control");
-for (var i = 0; i < controls.length; i++) {
-  control = controls[i];
-  control.onmouseover = function () {
-    showControls();
-    isControlActive = true;
+if (!parent.hideControls) {
+  controls = document.getElementsByClassName("control");
+  for (var i = 0; i < controls.length; i++) {
+    control = controls[i];
+    control.onmouseover = function () {
+      showControls();
+      isControlActive = true;
+    }
+    control.onmouseout = function () {
+      isControlActive = false;
+    }
   }
-  control.onmouseout = function () {
-    isControlActive = false;
-  }
+} else {
+  let restartStreamButton = document.getElementById('restartStreamButton');
+  hideControls();
 }
+
 
 window.onload = function () {
   startConn();
@@ -140,7 +146,7 @@ function createVideoIfNotExistent() {
     }
     video.onmousemove = function () {
       showControls();
-      setTimeout(function(){
+      setTimeout(function () {
         if (!isControlActive) {
           hideControls();
         }
@@ -153,20 +159,22 @@ function createVideoIfNotExistent() {
 }
 
 function showControls() {
-  let controls = document.getElementsByClassName("control");
-  for (var i = 0; i < controls.length; i++) {
-    let control = controls[i];
-    control.style.visibility = "visible";
-  }
+  if (!parent.hideControls) {
+    let controls = document.getElementsByClassName("control");
+    for (var i = 0; i < controls.length; i++) {
+      let control = controls[i];
+      control.style.visibility = "visible";
+    }
 
-  // フルスクリーンの場合
-  if (isFullScreen()) {
-    document.getElementById("fullScreenControl").style.visibility = "hidden";
-    document.getElementById("exitFullScreenControl").style.visibility = "visible";
-  }
-  else {
-    document.getElementById("fullScreenControl").style.visibility = "visible";
-    document.getElementById("exitFullScreenControl").style.visibility = "hidden";
+    // フルスクリーンの場合
+    if (isFullScreen()) {
+      document.getElementById("fullScreenControl").style.visibility = "hidden";
+      document.getElementById("exitFullScreenControl").style.visibility = "visible";
+    }
+    else {
+      document.getElementById("fullScreenControl").style.visibility = "visible";
+      document.getElementById("exitFullScreenControl").style.visibility = "hidden";
+    }
   }
 }
 
@@ -210,38 +218,18 @@ function muteUnmute() {
   }
 }
 
-// function fullScreen() {
-//   if (remoteVideo != null) {
-//     openFullscreen(remoteVideo);
-//   }
-// }
-
-// function openFullscreen(myVideo) {
-//   var elem = myVideo
-//   console.log(elem)
-//   if (elem.requestFullscreen) {
-//     elem.requestFullscreen();
-//   } else if (elem.mozRequestFullScreen) { /* Firefox */
-//     elem.mozRequestFullScreen();
-//   } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-//     elem.webkitRequestFullscreen();
-//   } else if (elem.msRequestFullscreen) { /* IE/Edge */
-//     elem.msRequestFullscreen();
-//   }
-// }
-
 // フルスクリーン表示
 function fullScreen() {
   // Chrome & Firefox v64以降
   if (document.documentElement.requestFullscreen) {
     document.documentElement.requestFullscreen();
-  // Firefox v63以前
+    // Firefox v63以前
   } else if (document.documentElement.mozRequestFullScreen) {
     document.documentElement.mozRequestFullScreen();
-  // Safari & Edge & Chrome v68以前
+    // Safari & Edge & Chrome v68以前
   } else if (document.documentElement.webkitRequestFullscreen) {
     document.documentElement.webkitRequestFullscreen();
-  // IE11
+    // IE11
   } else if (document.documentElement.msRequestFullscreen) {
     document.documentElement.msRequestFullscreen();
   }
@@ -254,13 +242,13 @@ function exitFullScreen() {
   // Chrome & Firefox v64以降
   if (document.exitFullscreen) {
     document.exitFullscreen();
-  // Firefox v63以前
+    // Firefox v63以前
   } else if (document.mozCancelFullScreen) {
     document.mozCancelFullScreen();
-  // Safari & Edge & Chrome v44以前
+    // Safari & Edge & Chrome v44以前
   } else if (document.webkitCancelFullScreen) {
     document.webkitCancelFullScreen();
-  // IE11
+    // IE11
   } else if (document.msExitFullscreen) {
     document.msExitFullscreen();
   }
@@ -270,12 +258,12 @@ function exitFullScreen() {
 function fullScreenChange() {
   var mode = window.parent.document.getElementById("videoMode");
   var name = window.parent.document.getElementById("fullCameraName");
-  if( window.document.fullscreenElement ){
+  if (window.document.fullscreenElement) {
     mode.value = "1";
     name.value = roomId;
     console.log("フルスクリーン表示");
   }
-  else{
+  else {
     mode.value = "0";
     name.value = "";
     console.log("フルスクリーン解除");
