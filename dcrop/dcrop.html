@@ -1,0 +1,80 @@
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <title>DCrop Streamer</title>
+  <!-- CSS Files-->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
+  <link rel="stylesheet" href="css/dcrop.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/cameraSettingsMenu.css">
+</head>
+
+<body>
+  <div>
+    <input id="roomIdInput" style="display: none;" type="text" value=""></input>
+    <input id="clientIdInput" style="display: none;" disabled type="text" value=""></input>
+    <select id="video-codec" style="display: none;" onChange="onChangeVideoCodec();">
+      <option value="H264">H264</option>
+    </select>
+
+    <div id="videoContainer" style="float:left;">
+      <!-- <video id="remote-video" autoplay playsinline controls muted></video> -->
+    </div>
+
+    <div class="dropup noselect control">
+      <span class="dropbtn" onclick="javascript:switchAdjustmentsMenu();">調整</span>
+      <div id="cameraAdjustmentsMenu" class="dropup-content">
+        <span><i class="minusIcon" onclick="javascript:exposureDown();">-</i><label>露出</label><i class="plusIcon"
+            onclick="javascript:exposureUp();">+</i></span>
+        <span><i class="minusIcon" onclick="javascript:brightnessDown();">-</i><label>明るさ</label><i class="plusIcon"
+            onclick="javascript:brightnessUp();">+</i></span>
+        <span><i class="minusIcon" onclick="javascript:contrastDown();">-</i><label>コントラスト</label><i class="plusIcon"
+            onclick="javascript:contrastUp();">+</i></span>
+      </div>
+    </div>
+
+    <span id="cameraName" class="cameraName noselect control">
+      カメラ名
+    </span>
+    <span id="aspectControl" class="aspectControl noselect control"
+      onclick="javascript:switchAspect();">
+      <i class="fas fa-compress noselect"></i>
+    </span>
+
+    <span id="speakerControl" class="speakerControl noselect control"
+      onclick="javascript:muteUnmute();">
+      <i class="fas fa-volume-mute noselect"></i>
+    </span>
+
+    <span id="disconnectButton" class="disconnectButton noselect control"
+      onclick="javascript:disconnect();">
+      ページ再読込
+    </span>
+
+    <span id="restartStreamButton" class="restartStreamButton noselect control"
+      onclick="javascrip:dcropController.restartStream(roomId);">
+      リスタートストリーム
+    </span>
+
+    <span id="fullScreenControl" class="fullScreenControl noselect control"
+      onclick="javascript:fullScreen();">
+      <i class="fas fa-arrows-alt"></i>
+    </span>
+
+    <span id="exitFullScreenControl" class="exitFullScreenControl noselect control"
+      onclick="javascript:exitFullScreen();">
+      <i class="fas fa-window-close"></i>
+  </div>
+  <!-- JS Files-->
+  <script type="text/javascript" src="js/logger/logger.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@open-ayame/ayame-web-sdk@2020.3.0/dist/ayame.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.7.0/qs.min.js"></script>
+  <script src="js/ayame-main.js"></script>
+  <script type="text/javascript" src="js/dcrop.js"></script>
+  <script type="text/javascript" src="js/cameraControl.js"></script>
+  <script type="text/javascript" src="js/dcropCrontrol.js"></script>
+</body>
+
+</html>
